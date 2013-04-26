@@ -3,6 +3,8 @@
 }
 
 #text-time {
+  font-family: monospace;
   font-size: 25pt;
+  font-weight: bold;
   margin: none;
 }
