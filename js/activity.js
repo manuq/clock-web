@@ -94,14 +94,35 @@ function drawSimpleBackground() {
     ctx.lineCap = 'round';
     ctx.beginPath();
 
-    cos = Math.cos(i * Math.PI / 30);
-    sin = Math.sin(i * Math.PI / 30);
+    var cos = Math.cos(i * Math.PI / 30);
+    var sin = Math.sin(i * Math.PI / 30);
     ctx.moveTo(radius + (radius - inset) * cos,
-               radius + (radius - inset) * sin)
+               radius + (radius - inset) * sin);
     ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
-               radius + (radius - ctx.lineWidth) * sin)
+               radius + (radius - ctx.lineWidth) * sin);
 
     ctx.stroke();
+  }
+}
+
+function drawNumbers() {
+  // Draw the numbers of the hours.
+
+  ctx.fillStyle = colors['hours'];
+  ctx.textBaseline = 'middle';
+  ctx.font = "bold 40px sans-serif";
+
+  for (var i=0; i<12; i++) {
+    var cos = Math.cos((i - 2) * Math.PI / 6);
+    var sin = Math.sin((i - 2) * Math.PI / 6);
+    var text = i + 1;
+    var textWidth = ctx.measureText(text).width;
+
+    ctx.save()
+    ctx.translate(centerX - textWidth / 2, centerY);
+    ctx.translate(radius * 0.75 * cos, radius * 0.75 * sin);
+    ctx.fillText(text, 0, 0);
+    ctx.restore()
   }
 }
 
@@ -129,6 +150,7 @@ function draw() {
 
   // FIXME draw background in other layer to prevent redrawings
   drawSimpleBackground();
+  drawNumbers();
 
   drawHands();
 }
