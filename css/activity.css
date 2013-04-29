@@ -2,9 +2,20 @@
   text-align: center;
 }
 
+#clock-container {
+  position: relative;
+  margin: 0 auto;
+}
+
+canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 #text-time {
   font-family: monospace;
   font-size: 25pt;
   font-weight: bold;
-  margin: none;
+  margin: 0;
 }
