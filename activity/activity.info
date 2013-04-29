@@ -2,6 +2,6 @@
 name = Clock
 activity_version = 1
 bundle_id = org.sugarlabs.ClockJS
-exec = sugar-activity-html --uri activity.html
+exec = sugar-activity-html
 icon = activity-clock
 license = GPLv2+
