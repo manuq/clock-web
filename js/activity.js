@@ -13,17 +13,17 @@ clockContainerElem.insertBefore(bgCanvasElem, clockCanvasElem);
 var clockContext = clockCanvasElem.getContext("2d");
 var backgroundContext = bgCanvasElem.getContext('2d');
 
-// FIXME should be calculated on each resize to fill the available
-// space
+// These are calculated on each resize to fill the available space
 var height;
 var width;
 var radius;
 var centerX;
 var centerY;
 var lineWidthBase;
-var handAngles = {'hours': 0, 'minutes': 0, 'seconds': 0};
 var handSizes;
 var lineWidths;
+
+var handAngles = {'hours': 0, 'minutes': 0, 'seconds': 0};
 
 var colors = {
   'black': "#000000",
@@ -34,7 +34,7 @@ var colors = {
 };
 
 function updateSizes() {
-  height = document.height - textTimeElem.offsetHeight;
+  height = window.innerHeight - textTimeElem.offsetHeight;
   width = height;
 
   clockCanvasElem.width = width;
@@ -196,6 +196,7 @@ window.onresize = function(event) {
   updateSizes();
   drawSimpleBackground(backgroundContext);
   drawNumbers(backgroundContext);
+  drawHands(clockContext);
 }
 
 animate();
