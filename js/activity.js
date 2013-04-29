@@ -5,38 +5,64 @@ var previousTime = Date.now();
 var textTimeElem = document.getElementById('text-time');
 var clockCanvasElem = document.getElementById("clock-canvas");
 
-// FIXME should be calculated on each resize to fill the available
-// space
-clockCanvasElem.width = 400;
-clockCanvasElem.height = 400; 
+var clockContainerElem = clockCanvasElem.parentNode;
 
-var ctx = clockCanvasElem.getContext("2d");
-var width = clockCanvasElem.width;
-var height = clockCanvasElem.height;
-var radius = width / 2;
-var centerX = radius;
-var centerY = radius;
-var lineWidthBase = radius / 150;
+var bgCanvasElem = document.createElement('canvas');
+clockContainerElem.insertBefore(bgCanvasElem, clockCanvasElem);
+
+var clockContext = clockCanvasElem.getContext("2d");
+var backgroundContext = bgCanvasElem.getContext('2d');
+
+// These are calculated on each resize to fill the available space
+var height;
+var width;
+var radius;
+var centerX;
+var centerY;
+var lineWidthBase;
+var handSizes;
+var lineWidths;
 
 var handAngles = {'hours': 0, 'minutes': 0, 'seconds': 0};
-var handSizes = {
+
+var colors = {
+  'black': "#000000",
+  'white': "#FFFFFF",
+  'hours': "#005FE4",
+  'minutes': "#00B20D",
+  'seconds': "#E6000A"
+};
+
+function updateSizes() {
+  height = window.innerHeight - textTimeElem.offsetHeight;
+  width = height;
+
+  clockCanvasElem.width = width;
+  clockCanvasElem.height = width;
+
+  bgCanvasElem.width = width;
+  bgCanvasElem.height = height;
+
+  clockContainerElem.style.width = width + "px";
+  clockContainerElem.style.height = height + "px";
+
+  radius = width / 2;
+  centerX = radius;
+  centerY = radius;
+  lineWidthBase = radius / 150;
+
+  handSizes = {
     'hours': radius * 0.5,
     'minutes': radius * 0.7,
     'seconds': radius * 0.8
-};
-var lineWidths = {
+  };
+
+  lineWidths = {
     'hours': lineWidthBase * 9,
     'minutes': lineWidthBase * 6,
     'seconds': lineWidthBase * 4
-};
-var colors = {
-    'black': "#000000",
-    'white': "#FFFFFF",
-    'hours': "#005FE4",
-    'minutes': "#00B20D",
-    'seconds': "#E6000A"
-};
-
+  };
+}
 
 function update() {
   // update text time
@@ -59,7 +85,7 @@ function update() {
   handAngles['seconds'] = Math.PI - Math.PI / 30 * seconds;
 }
 
-function drawSimpleBackground() {
+function drawSimpleBackground(ctx) {
   // Draw the background of the simple clock.
   //
   // The simple clock background is a white disk, with hours and
@@ -91,22 +117,46 @@ function drawSimpleBackground() {
       ctx.lineWidth = lineWidthBase * 4;
     }
 
-  ctx.lineCap = 'round';
-  ctx.beginPath();
+    ctx.lineCap = 'round';
+    ctx.beginPath();
 
-  cos = Math.cos(i * Math.PI / 30);
-  sin = Math.sin(i * Math.PI / 30);
-  ctx.moveTo(radius + (radius - inset) * cos,
-             radius + (radius - inset) * sin)
-  ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
-             radius + (radius - ctx.lineWidth) * sin)
+    var cos = Math.cos(i * Math.PI / 30);
+    var sin = Math.sin(i * Math.PI / 30);
+    ctx.moveTo(radius + (radius - inset) * cos,
+               radius + (radius - inset) * sin);
+    ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
+               radius + (radius - ctx.lineWidth) * sin);
 
-  ctx.stroke();
+    ctx.stroke();
   }
 }
 
-function drawHands() {
+function drawNumbers(ctx) {
+  // Draw the numbers of the hours.
+
+  ctx.fillStyle = colors['hours'];
+  ctx.textBaseline = 'middle';
+  ctx.font = "bold 40px sans-serif";
+
+  for (var i=0; i<12; i++) {
+    var cos = Math.cos((i - 2) * Math.PI / 6);
+    var sin = Math.sin((i - 2) * Math.PI / 6);
+    var text = i + 1;
+    var textWidth = ctx.measureText(text).width;
+
+    ctx.save()
+    ctx.translate(centerX - textWidth / 2, centerY);
+    ctx.translate(radius * 0.75 * cos, radius * 0.75 * sin);
+    ctx.fillText(text, 0, 0);
+    ctx.restore()
+  }
+}
+
+function drawHands(ctx) {
   // Draw the hands of the analog clocks.
+
+  // Clear canvas first.
+  ctx.clearRect(0, 0, width, height);
 
   var handNames = ['hours', 'minutes', 'seconds'];
   for (var i=0; i<handNames.length; i++) {
@@ -124,13 +174,7 @@ function drawHands() {
 }
 
 function draw() {
-  // clear
-  ctx.clearRect(0, 0, width, height);
-
-  // FIXME draw background in other layer to prevent redrawings
-  drawSimpleBackground();
-
-  drawHands();
+  drawHands(clockContext);
 }
 
 function animate() {
@@ -142,6 +186,17 @@ function animate() {
     draw();
   }
   requestAnimationFrame(animate);
+}
+
+updateSizes();
+drawSimpleBackground(backgroundContext);
+drawNumbers(backgroundContext);
+
+window.onresize = function(event) {
+  updateSizes();
+  drawSimpleBackground(backgroundContext);
+  drawNumbers(backgroundContext);
+  drawHands(clockContext);
 }
 
 animate();
