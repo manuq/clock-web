@@ -91,17 +91,17 @@ function drawSimpleBackground() {
       ctx.lineWidth = lineWidthBase * 4;
     }
 
-  ctx.lineCap = 'round';
-  ctx.beginPath();
+    ctx.lineCap = 'round';
+    ctx.beginPath();
 
-  cos = Math.cos(i * Math.PI / 30);
-  sin = Math.sin(i * Math.PI / 30);
-  ctx.moveTo(radius + (radius - inset) * cos,
-             radius + (radius - inset) * sin)
-  ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
-             radius + (radius - ctx.lineWidth) * sin)
+    cos = Math.cos(i * Math.PI / 30);
+    sin = Math.sin(i * Math.PI / 30);
+    ctx.moveTo(radius + (radius - inset) * cos,
+               radius + (radius - inset) * sin)
+    ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
+               radius + (radius - ctx.lineWidth) * sin)
 
-  ctx.stroke();
+    ctx.stroke();
   }
 }
 
