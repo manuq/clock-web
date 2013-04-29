@@ -35,7 +35,7 @@ var colors = {
 
 function updateSizes() {
   height = window.innerHeight - textTimeElem.offsetHeight;
-  width = height;
+  width = Math.min(window.innerWidth, height);
 
   clockCanvasElem.width = width;
   clockCanvasElem.height = width;
