@@ -177,6 +177,10 @@ function draw() {
   drawHands(clockContext);
 }
 
+var requestAnimationFrame = window.requestAnimationFrame ||
+  window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
+  || window.msRequestAnimationFrame;
+
 function animate() {
   var currentTime = Date.now();
 
