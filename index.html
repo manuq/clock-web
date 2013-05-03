@@ -5,8 +5,13 @@
 <title>Clock</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/activity.css">
+<script data-main="js/activity" src="lib/require.js"></script>
 </head>
 <body>
+  <div id="toolbar">
+    <button id="activity-button" class="activity-icon" title="Clock Activity">.</button>
+    <button id="close-button" class="stop-icon pull-right" title="Stop">.</button>
+  </div>
   <div id="canvas">
     <div id="clock-container">
       <canvas id="clock-canvas"></canvas>
@@ -15,6 +20,5 @@
       <p id="text-time">What Time Is It?</p>
     </div>
   </div>
-  <script src="js/activity.js" type="text/javascript"></script>
 </body>
 </html>

@@ -19,3 +19,7 @@ canvas {
   font-weight: bold;
   margin: 0;
 }
+
+#toolbar button.activity-icon {
+  background-image: url('../activity/activity-clock.svg');
+}
