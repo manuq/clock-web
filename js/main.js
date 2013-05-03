@@ -45,7 +45,7 @@ var colors = {
 function updateSizes() {
   var toolbarElem = document.getElementById("toolbar");
   height = window.innerHeight - (textTimeElem.offsetHeight +
-                                 toolbarElem.offsetHeight);
+                                 toolbarElem.offsetHeight) - 1;
 
   width = Math.min(window.innerWidth, height);
 
