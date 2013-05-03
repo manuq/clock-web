@@ -43,7 +43,10 @@ var colors = {
 };
 
 function updateSizes() {
-  height = window.innerHeight - textTimeElem.offsetHeight;
+  var toolbarElem = document.getElementById("toolbar");
+  height = window.innerHeight - (textTimeElem.offsetHeight +
+                                 toolbarElem.offsetHeight);
+
   width = Math.min(window.innerWidth, height);
 
   clockCanvasElem.width = width;
