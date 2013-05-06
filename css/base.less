@@ -2,6 +2,8 @@
 @button-grey: #808080;
 @panel-grey: #C0C0C0;
 
+@toolbutton-size: 46px;
+@toolbutton-margin: 2px;
 html {
   height: 100%;
 }
@@ -24,23 +26,23 @@ button {
 #toolbar {
   color: white;
   background-color: @toolbar-grey;
-  height: 63px;
-  padding: 0 55px;
+  padding: 0 @toolbutton-size + (5 * @toolbutton-margin);
   .unselectable;
 }
 
 #toolbar button {
   background-color: transparent;
   background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   color: white;
   color: transparent;
-  border: 2px solid transparent;
+  border: 0;
   border-radius: 5px;
-  padding: 5px;
-  margin: 4px 2px;
-  width: 55px;
-  height: 55px;
+  padding: 1px;
+  margin: (2 * @toolbutton-margin) @toolbutton-margin;
+  width: @toolbutton-size;
+  height: @toolbutton-size;
 }
 
 #toolbar button:hover {
@@ -48,17 +50,8 @@ button {
 }
 
 #toolbar button:active,
-#toolbar button.active,
- {
+#toolbar button.active {
   background-color: @button-grey;
-}
-
-#toolbar button.view-icon {
-  background-image: url('../images/toolbar-view.svg');
-}
-
-#toolbar button.edit-icon {
-  background-image: url('../images/toolbar-edit.svg');
 }
 
 #toolbar #stop-button {

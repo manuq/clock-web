@@ -16,23 +16,23 @@ button {
 #toolbar {
   color: white;
   background-color: #282828;
-  height: 63px;
-  padding: 0 55px;
+  padding: 0 56px;
   -moz-user-select: none;
   -webkit-user-select: none;
 }
 #toolbar button {
   background-color: transparent;
   background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   color: white;
   color: transparent;
-  border: 2px solid transparent;
+  border: 0;
   border-radius: 5px;
-  padding: 5px;
+  padding: 1px;
   margin: 4px 2px;
-  width: 55px;
-  height: 55px;
+  width: 46px;
+  height: 46px;
 }
 #toolbar button:hover {
   background-color: black;
@@ -40,12 +40,6 @@ button {
 #toolbar button:active,
 #toolbar button.active {
   background-color: #808080;
-}
-#toolbar button.view-icon {
-  background-image: url('../images/toolbar-view.svg');
-}
-#toolbar button.edit-icon {
-  background-image: url('../images/toolbar-edit.svg');
 }
 #toolbar #stop-button {
   background-image: url('../images/activity-stop.svg');
