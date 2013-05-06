@@ -189,7 +189,7 @@ function drawSimpleBackground(ctx) {
 
 function drawNiceBackground(ctx) {
   var niceImageElem = document.createElement('img');
-  niceImageElem.src = "file:///home/manuq/prog/clockjs/images/clock.svg";
+  niceImageElem.src = "images/clock.svg";
   ctx.drawImage(niceImageElem, 0, 0, width, height);
 }
 
