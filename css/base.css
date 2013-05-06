@@ -16,8 +16,7 @@ button {
 #toolbar {
   color: white;
   background-color: #282828;
-  height: 63px;
-  padding: 0 55px;
+  padding: 0 56px;
   -moz-user-select: none;
   -webkit-user-select: none;
 }
@@ -28,12 +27,12 @@ button {
   background-repeat: no-repeat;
   color: white;
   color: transparent;
-  border: 2px solid transparent;
+  border: 0;
   border-radius: 5px;
   padding: 1px;
   margin: 4px 2px;
-  width: 55px;
-  height: 55px;
+  width: 46px;
+  height: 46px;
 }
 #toolbar button:hover {
   background-color: black;
