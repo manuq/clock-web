@@ -24,12 +24,13 @@ button {
 #toolbar button {
   background-color: transparent;
   background-position: center;
+  background-size: contain;
   background-repeat: no-repeat;
   color: white;
   color: transparent;
   border: 2px solid transparent;
   border-radius: 5px;
-  padding: 5px;
+  padding: 1px;
   margin: 4px 2px;
   width: 55px;
   height: 55px;
