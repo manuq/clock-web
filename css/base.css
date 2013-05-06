@@ -46,7 +46,7 @@ button {
 #toolbar button.edit-icon {
   background-image: url('../images/toolbar-edit.svg');
 }
-#toolbar button.stop-icon {
+#toolbar #stop-button {
   background-image: url('../images/activity-stop.svg');
 }
 .pull-right {

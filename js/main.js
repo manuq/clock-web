@@ -2,8 +2,8 @@ define(function (require) {
 
 var activity = require("sugar-html-core/activity");
 
-var closeButton = document.getElementById("close-button");
-closeButton.onclick = function() {
+var stopButton = document.getElementById("stop-button");
+stopButton.onclick = function() {
     activity.close();
 }
 
