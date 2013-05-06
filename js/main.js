@@ -1,6 +1,23 @@
 define(function (require) {
 
 var activity = require("sugar-html-core/activity");
+var icons = require("sugar-html-artwork/icons");
+
+// Colorize the activity icon:
+
+var activityIcon = document.getElementById("activity-button")
+                           .getElementsByTagName("img")[0];
+
+// FIXME use example colors for now:
+var iconInfo = {
+  "uri": activityIcon.src,
+  "fillColor": "#8BFF7A",
+  "strokeColor": "#00A0FF"
+};
+
+icons.load(iconInfo, function(data) {
+  activityIcon.src = data;
+});
 
 var simpleClockButton = document.getElementById("simple-clock-button");
 var niceClockButton = document.getElementById("nice-clock-button");
