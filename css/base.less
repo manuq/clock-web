@@ -47,7 +47,9 @@ button {
   background-color: black;
 }
 
-#toolbar button:active {
+#toolbar button:active,
+#toolbar button.active,
+ {
   background-color: @button-grey;
 }
 
@@ -59,7 +61,7 @@ button {
   background-image: url('../images/toolbar-edit.svg');
 }
 
-#toolbar button.stop-icon {
+#toolbar #stop-button {
   background-image: url('../images/activity-stop.svg');
 }
 

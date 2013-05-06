@@ -37,7 +37,8 @@ button {
 #toolbar button:hover {
   background-color: black;
 }
-#toolbar button:active {
+#toolbar button:active,
+#toolbar button.active {
   background-color: #808080;
 }
 #toolbar button.view-icon {
@@ -46,7 +47,7 @@ button {
 #toolbar button.edit-icon {
   background-image: url('../images/toolbar-edit.svg');
 }
-#toolbar button.stop-icon {
+#toolbar #stop-button {
   background-image: url('../images/activity-stop.svg');
 }
 .pull-right {

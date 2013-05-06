@@ -2,8 +2,52 @@ define(function (require) {
 
 var activity = require("sugar-html-core/activity");
 
-var closeButton = document.getElementById("close-button");
-closeButton.onclick = function() {
+var simpleClockButton = document.getElementById("simple-clock-button");
+var niceClockButton = document.getElementById("nice-clock-button");
+
+// Useful functions to handle element classes:
+
+function hasClass(ele, cls) {
+  return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+function addClass(ele, cls) {
+  if (!hasClass(ele, cls)) ele.className += " " + cls;
+}
+function removeClass(ele, cls) {
+  if (hasClass(ele, cls)) {
+    var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+    ele.className=ele.className.replace(reg,' ');
+  }
+}
+
+var clockStyle;
+
+function activateSimple() {
+  clockStyle = "simple";
+  addClass(simpleClockButton, "active");
+  removeClass(niceClockButton, "active");
+}
+
+activateSimple();
+
+function activateNice() {
+  clockStyle = "nice";
+  addClass(niceClockButton, "active");
+  removeClass(simpleClockButton, "active");
+}
+
+simpleClockButton.onclick = function() {
+  activateSimple();
+  drawBackground();
+}
+
+niceClockButton.onclick = function() {
+  activateNice();
+  drawBackground();
+}
+
+var stopButton = document.getElementById("stop-button");
+stopButton.onclick = function() {
     activity.close();
 }
 
@@ -143,6 +187,12 @@ function drawSimpleBackground(ctx) {
   }
 }
 
+function drawNiceBackground(ctx) {
+  var niceImageElem = document.createElement('img');
+  niceImageElem.src = "file:///home/manuq/prog/clockjs/images/clock.svg";
+  ctx.drawImage(niceImageElem, 0, 0, width, height);
+}
+
 function drawNumbers(ctx) {
   // Draw the numbers of the hours.
 
@@ -185,10 +235,6 @@ function drawHands(ctx) {
   }
 }
 
-function draw() {
-  drawHands(clockContext);
-}
-
 var requestAnimationFrame = window.requestAnimationFrame ||
   window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
   || window.msRequestAnimationFrame;
@@ -199,20 +245,29 @@ function animate() {
   if ((currentTime - previousTime) > (1000 / fps)) {
     previousTime = currentTime;
     update();
-    draw();
+    drawHands(clockContext);
   }
   requestAnimationFrame(animate);
 }
 
+function drawBackground() {
+  backgroundContext.clearRect(0, 0, width, height);
+  if (clockStyle == "simple") {
+    drawSimpleBackground(backgroundContext);
+    drawNumbers(backgroundContext);
+  }
+  else {
+    drawNiceBackground(backgroundContext);
+  }
+  drawHands(clockContext);
+}
+
 updateSizes();
-drawSimpleBackground(backgroundContext);
-drawNumbers(backgroundContext);
+drawBackground();
 
 window.onresize = function(event) {
   updateSizes();
-  drawSimpleBackground(backgroundContext);
-  drawNumbers(backgroundContext);
-  drawHands(clockContext);
+  drawBackground();
 }
 
 animate();
