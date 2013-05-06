@@ -1,6 +1,22 @@
 define(function (require) {
 
 var activity = require("sugar-html-core/activity");
+var icons = require("sugar-html-artwork/icons");
+
+// Colorize the activity icon:
+
+var activityIcon = document.getElementById("activity-button")
+                           .getElementsByTagName("img")[0];
+
+var iconInfo = {
+  "uri": activityIcon.src,
+  "fillColor": "#ff0000",
+  "strokeColor": "grey"
+};
+
+icons.load(iconInfo, function(data) {
+  activityIcon.src = "url('" + data + "')";
+});
 
 var simpleClockButton = document.getElementById("simple-clock-button");
 var niceClockButton = document.getElementById("nice-clock-button");
