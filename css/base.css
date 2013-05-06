@@ -41,12 +41,6 @@ button {
 #toolbar button.active {
   background-color: #808080;
 }
-#toolbar button.view-icon {
-  background-image: url('../images/toolbar-view.svg');
-}
-#toolbar button.edit-icon {
-  background-image: url('../images/toolbar-edit.svg');
-}
 #toolbar #stop-button {
   background-image: url('../images/activity-stop.svg');
 }
