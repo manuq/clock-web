@@ -1,7 +1,7 @@
 define(function (require) {
 
 var activity = require("sugar-html-core/activity");
-var icons = require("sugar-html-artwork/icons");
+var icons = require("sugar-html-graphics/icons");
 
 // Colorize the activity icon:
 
