@@ -5,16 +5,15 @@ var icons = require("sugar-html-artwork/icons");
 
 // Colorize the activity icon:
 
-var activityIcon = document.getElementById("activity-button")
-                           .getElementsByTagName("img")[0];
+var activityButton = document.getElementById("activity-button");
 
 var iconInfo = {
-  "uri": activityIcon.src
+  "uri": activityButton.style.backgroundImage
 };
 
 function colorizeActivityIcon(iconInfo) {
   icons.load(iconInfo, function(data) {
-    activityIcon.src = data;
+    activityButton.style.backgroundImage = "url('" + data + "')";
   });
 }
 
