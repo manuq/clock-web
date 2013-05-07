@@ -8,16 +8,29 @@ var icons = require("sugar-html-artwork/icons");
 var activityIcon = document.getElementById("activity-button")
                            .getElementsByTagName("img")[0];
 
-// FIXME use example colors for now:
 var iconInfo = {
-  "uri": activityIcon.src,
-  "fillColor": "#8BFF7A",
-  "strokeColor": "#00A0FF"
+  "uri": activityIcon.src
 };
 
-icons.load(iconInfo, function(data) {
-  activityIcon.src = data;
-});
+function colorizeActivityIcon(iconInfo) {
+  icons.load(iconInfo, function(data) {
+    activityIcon.src = data;
+  });
+}
+
+try {
+  activity.getXOColor(function(data) {
+    iconInfo.strokeColor = data[0];
+    iconInfo.fillColor = data[1];
+    colorizeActivityIcon(iconInfo);
+  });
+}
+catch (err) {
+  // Sugar API not available, use sample colors:
+  iconInfo.strokeColor = "#00A0FF";
+  iconInfo.fillColor = "#8BFF7A";
+  colorizeActivityIcon(iconInfo);
+}
 
 var simpleClockButton = document.getElementById("simple-clock-button");
 var niceClockButton = document.getElementById("nice-clock-button");
