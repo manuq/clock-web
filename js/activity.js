@@ -83,8 +83,6 @@ define(function (require) {
     var backgroundContext = bgCanvasElem.getContext('2d');
 
     // These are calculated on each resize to fill the available space
-    var height;
-    var width;
     var radius;
     var centerX;
     var centerY;
@@ -108,21 +106,22 @@ define(function (require) {
 
     function updateSizes() {
         var toolbarElem = document.getElementById("toolbar");
-        height = window.innerHeight - (textTimeElem.offsetHeight +
+
+        var height = window.innerHeight - (textTimeElem.offsetHeight +
             toolbarElem.offsetHeight) - 1;
 
-        width = Math.min(window.innerWidth, height);
+        var size = Math.min(window.innerWidth, height);
 
-        clockCanvasElem.width = width;
-        clockCanvasElem.height = width;
+        clockCanvasElem.width = size;
+        clockCanvasElem.height = size;
 
-        bgCanvasElem.width = width;
-        bgCanvasElem.height = height;
+        bgCanvasElem.width = size;
+        bgCanvasElem.height = size;
 
-        clockContainerElem.style.width = width + "px";
-        clockContainerElem.style.height = height + "px";
+        clockContainerElem.style.width = size + "px";
+        clockContainerElem.style.height = size + "px";
 
-        radius = width / 2;
+        radius = size / 2;
         centerX = radius;
         centerY = radius;
         lineWidthBase = radius / 150;
@@ -172,7 +171,7 @@ define(function (require) {
         // The simple clock background is a white disk, with hours and
         // minutes ticks, and the hour numbers.
 
-        backgroundContext.clearRect(0, 0, width, height);
+        backgroundContext.clearRect(0, 0, radius * 2, radius * 2);
 
         // Simple clock background
         var lineWidthBackground = lineWidthBase * 4;
@@ -218,7 +217,7 @@ define(function (require) {
     function drawNiceBackground(ctx) {
         var niceImageElem = document.createElement('img');
         var onLoad = function() {
-            backgroundContext.clearRect(0, 0, width, height);
+            backgroundContext.clearRect(0, 0, radius * 2, radius * 2);
             ctx.drawImage(niceImageElem, 0, 0, radius * 2, radius * 2);
         };
         niceImageElem.addEventListener('load', onLoad, false);
@@ -250,7 +249,7 @@ define(function (require) {
         // Draw the hands of the analog clocks.
 
         // Clear canvas first.
-        ctx.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, radius * 2, radius * 2);
 
         var handNames = ['hours', 'minutes', 'seconds'];
         for (var i = 0; i < handNames.length; i++) {
