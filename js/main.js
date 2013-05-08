@@ -186,6 +186,8 @@ define(function (require) {
         // The simple clock background is a white disk, with hours and
         // minutes ticks, and the hour numbers.
 
+        backgroundContext.clearRect(0, 0, width, height);
+
         // Simple clock background
         var lineWidthBackground = lineWidthBase * 4;
         ctx.lineCap = 'round';
@@ -230,6 +232,7 @@ define(function (require) {
     function drawNiceBackground(ctx) {
         var niceImageElem = document.createElement('img');
         var onLoad = function() {
+            backgroundContext.clearRect(0, 0, width, height);
             ctx.drawImage(niceImageElem, 0, 0, width, height);
         };
         niceImageElem.addEventListener('load', onLoad, false);
@@ -294,7 +297,6 @@ define(function (require) {
     }
 
     function drawBackground() {
-        backgroundContext.clearRect(0, 0, width, height);
         if (clockStyle == "simple") {
             drawSimpleBackground(backgroundContext);
             drawNumbers(backgroundContext);
