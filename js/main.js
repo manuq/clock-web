@@ -9,28 +9,9 @@ define(function (require) {
 
     // Colorize the activity icon.
 
-    function getBackgroundURL(elem) {
-        var style = elem.currentStyle || window.getComputedStyle(elem, '');
-        // Remove prefix 'url(' and suffix ')' before return
-        return style.backgroundImage.slice(4, -1);
-    }
-
     var activityButton = document.getElementById("activity-button");
-
-    var iconInfo = {
-        "uri": getBackgroundURL(activityButton)
-    };
-
-    function colorizeActivityIcon(iconInfo) {
-        icons.load(iconInfo, function (data) {
-            activityButton.style.backgroundImage = "url('" + data + "')";
-        });
-    }
-
-    activity.getXOColor(function (data) {
-        iconInfo.strokeColor = data[0];
-        iconInfo.fillColor = data[1];
-        colorizeActivityIcon(iconInfo);
+    activity.getXOColor(function (colors) {
+        icons.colorize(activityButton, colors);
     });
 
     var simpleClockButton = document.getElementById("simple-clock-button");
