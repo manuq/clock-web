@@ -219,7 +219,7 @@ define(function (require) {
         var niceImageElem = document.createElement('img');
         var onLoad = function() {
             backgroundContext.clearRect(0, 0, width, height);
-            ctx.drawImage(niceImageElem, 0, 0, width, height);
+            ctx.drawImage(niceImageElem, 0, 0, radius * 2, radius * 2);
         };
         niceImageElem.addEventListener('load', onLoad, false);
         niceImageElem.src = "images/clock.svg";
