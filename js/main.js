@@ -229,8 +229,11 @@ define(function (require) {
 
     function drawNiceBackground(ctx) {
         var niceImageElem = document.createElement('img');
+        var onLoad = function() {
+            ctx.drawImage(niceImageElem, 0, 0, width, height);
+        };
+        niceImageElem.addEventListener('load', onLoad, false);
         niceImageElem.src = "images/clock.svg";
-        ctx.drawImage(niceImageElem, 0, 0, width, height);
     }
 
     function drawNumbers(ctx) {
