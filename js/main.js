@@ -3,7 +3,11 @@ define(function (require) {
     var activity = require("sugar-html-core/activity");
     var icons = require("sugar-html-graphics/icons");
 
-    // Colorize the activity icon:
+    // Initialize the activity.
+
+    activity.setup();
+
+    // Colorize the activity icon.
 
     var activityIcon = document.getElementById("activity-button")
         .getElementsByTagName("img")[0];
@@ -18,19 +22,11 @@ define(function (require) {
         });
     }
 
-    try {
-        activity.getXOColor(function (data) {
-            iconInfo.strokeColor = data[0];
-            iconInfo.fillColor = data[1];
-            colorizeActivityIcon(iconInfo);
-        });
-    }
-    catch (err) {
-        // Sugar API not available, use sample colors:
-        iconInfo.strokeColor = "#00A0FF";
-        iconInfo.fillColor = "#8BFF7A";
+    activity.getXOColor(function (data) {
+        iconInfo.strokeColor = data[0];
+        iconInfo.fillColor = data[1];
         colorizeActivityIcon(iconInfo);
-    }
+    });
 
     var simpleClockButton = document.getElementById("simple-clock-button");
     var niceClockButton = document.getElementById("nice-clock-button");
@@ -77,6 +73,8 @@ define(function (require) {
         activateNice();
         drawBackground();
     };
+
+    // Make the activity stop with the stop button.
 
     var stopButton = document.getElementById("stop-button");
     stopButton.onclick = function () {

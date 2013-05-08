@@ -1,0 +1,10 @@
+{
+  "amd": {},
+  "volo": {
+    "baseUrl": "lib",
+    "dependencies": {
+      "sugar-html-core": "github:sugarlabs/sugar-html-core/master",
+      "sugar-html-graphics": "github:sugarlabs/sugar-html-graphics/master"
+    }
+  }
+}
