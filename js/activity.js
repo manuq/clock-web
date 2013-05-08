@@ -83,8 +83,8 @@ define(function (require) {
     var backgroundContext = bgCanvasElem.getContext('2d');
 
     // These are calculated on each resize to fill the available space
-    var height;
-    var width;
+    var size;
+    var margin;
     var radius;
     var centerX;
     var centerY;
@@ -108,23 +108,26 @@ define(function (require) {
 
     function updateSizes() {
         var toolbarElem = document.getElementById("toolbar");
-        height = window.innerHeight - (textTimeElem.offsetHeight +
+
+        var height = window.innerHeight - (textTimeElem.offsetHeight +
             toolbarElem.offsetHeight) - 1;
 
-        width = Math.min(window.innerWidth, height);
+        size = Math.min(window.innerWidth, height);
 
-        clockCanvasElem.width = width;
-        clockCanvasElem.height = width;
+        clockCanvasElem.width = size;
+        clockCanvasElem.height = size;
 
-        bgCanvasElem.width = width;
-        bgCanvasElem.height = height;
+        bgCanvasElem.width = size;
+        bgCanvasElem.height = size;
 
-        clockContainerElem.style.width = width + "px";
-        clockContainerElem.style.height = height + "px";
+        clockContainerElem.style.width = size + "px";
+        clockContainerElem.style.height = size + "px";
 
-        radius = width / 2;
-        centerX = radius;
-        centerY = radius;
+        margin = size * 0.02;
+        radius = (size - (2 * margin)) / 2;
+
+        centerX = radius + margin;
+        centerY = radius + margin;
         lineWidthBase = radius / 150;
 
         handSizes = {
@@ -172,7 +175,7 @@ define(function (require) {
         // The simple clock background is a white disk, with hours and
         // minutes ticks, and the hour numbers.
 
-        backgroundContext.clearRect(0, 0, width, height);
+        backgroundContext.clearRect(0, 0, size, size);
 
         // Simple clock background
         var lineWidthBackground = lineWidthBase * 4;
@@ -206,20 +209,24 @@ define(function (require) {
 
             var cos = Math.cos(i * Math.PI / 30);
             var sin = Math.sin(i * Math.PI / 30);
+            ctx.save();
+            ctx.translate(margin, margin);
             ctx.moveTo(radius + (radius - inset) * cos,
-            radius + (radius - inset) * sin);
+                       radius + (radius - inset) * sin);
             ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
-            radius + (radius - ctx.lineWidth) * sin);
+                       radius + (radius - ctx.lineWidth) * sin);
 
             ctx.stroke();
+            ctx.restore();
         }
     }
 
     function drawNiceBackground(ctx) {
         var niceImageElem = document.createElement('img');
         var onLoad = function() {
-            backgroundContext.clearRect(0, 0, width, height);
-            ctx.drawImage(niceImageElem, 0, 0, radius * 2, radius * 2);
+            backgroundContext.clearRect(margin, margin, radius * 2, radius * 2);
+            ctx.drawImage(niceImageElem, margin, margin, radius * 2,
+                          radius * 2);
         };
         niceImageElem.addEventListener('load', onLoad, false);
         niceImageElem.src = "images/clock.svg";
@@ -250,7 +257,7 @@ define(function (require) {
         // Draw the hands of the analog clocks.
 
         // Clear canvas first.
-        ctx.clearRect(0, 0, width, height);
+        ctx.clearRect(margin, margin, radius * 2, radius * 2);
 
         var handNames = ['hours', 'minutes', 'seconds'];
         for (var i = 0; i < handNames.length; i++) {
