@@ -9,16 +9,21 @@ define(function (require) {
 
     // Colorize the activity icon.
 
-    var activityIcon = document.getElementById("activity-button")
-        .getElementsByTagName("img")[0];
+    function getBackgroundURL(elem) {
+        var style = elem.currentStyle || window.getComputedStyle(elem, '');
+        // Remove prefix 'url(' and suffix ')' before return
+        return style.backgroundImage.slice(4, -1);
+    }
+
+    var activityButton = document.getElementById("activity-button");
 
     var iconInfo = {
-        "uri": activityIcon.src
+        "uri": getBackgroundURL(activityButton)
     };
 
     function colorizeActivityIcon(iconInfo) {
         icons.load(iconInfo, function (data) {
-            activityIcon.src = data;
+            activityButton.style.backgroundImage = "url('" + data + "')";
         });
     }
 
