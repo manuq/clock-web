@@ -1,6 +1,7 @@
 define(function (require) {
 
     var activity = require("sugar-html-core/activity");
+    var palette = require("sugar-html-graphics/palette");
     var icons = require("sugar-html-graphics/icons");
 
     // Initialize the activity.
@@ -13,6 +14,17 @@ define(function (require) {
     activity.getXOColor(function (colors) {
         icons.colorize(activityButton, colors);
     });
+
+    var activityPalette = new palette.Palette(activityButton);
+
+    var sampleText = document.createElement('p');
+    sampleText.innerText = "Clock Activity";
+    var container = activityPalette.getContainer();
+    container.appendChild(sampleText);
+
+    activityButton.onclick = function() {
+        activityPalette.toggle();
+    };
 
     var simpleClockButton = document.getElementById("simple-clock-button");
     var niceClockButton = document.getElementById("nice-clock-button");
