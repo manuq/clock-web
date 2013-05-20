@@ -1,6 +1,6 @@
 define(function (require) {
 
-    var activity = require("sugar-html-core/activity");
+    var activity = require("sugar-html-activity/activity");
     var palette = require("sugar-html-graphics/palette");
     var icons = require("sugar-html-graphics/icons");
 
