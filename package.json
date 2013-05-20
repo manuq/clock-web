@@ -3,8 +3,10 @@
   "volo": {
     "baseUrl": "lib",
     "dependencies": {
-      "sugar-html-core": "github:sugarlabs/sugar-html-core/master",
-      "sugar-html-graphics": "github:sugarlabs/sugar-html-graphics/master"
+      "sugar-html-bus": "github:sugarlabs/sugar-html-bus/master",
+      "sugar-html-activity": "github:sugarlabs/sugar-html-activity/master",
+      "sugar-html-graphics": "github:sugarlabs/sugar-html-graphics/master",
+      "domReady": "github:requirejs/domReady/2.0.1"
     }
   }
 }
