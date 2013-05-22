@@ -3,6 +3,8 @@ define(function (require) {
     var activity = require("sugar-html-activity/activity");
     var palette = require("sugar-html-graphics/palette");
     var icons = require("sugar-html-graphics/icons");
+    var util = require("sugar-html-graphics/util");
+    var radioToolButton = require("sugar-html-graphics/radiotoolbutton");
 
     // Manipulate the DOM only when it is ready.
     require(['domReady!'], function (doc) {
@@ -32,47 +34,22 @@ define(function (require) {
         var simpleClockButton = document.getElementById("simple-clock-button");
         var niceClockButton = document.getElementById("nice-clock-button");
 
-        // Useful functions to handle element classes:
+        var simpleNiceRadio = new radioToolButton.RadioToolButton(
+            [simpleClockButton, niceClockButton]);
 
-        function hasClass(ele, cls) {
-            return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-        }
+        var clockStyle = "simple";
 
-        function addClass(ele, cls) {
-            if (!hasClass(ele, cls)) ele.className += " " + cls;
-        }
-
-        function removeClass(ele, cls) {
-            if (hasClass(ele, cls)) {
-                var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-                ele.className = ele.className.replace(reg, ' ');
-            }
-        }
-
-        var clockStyle;
-
-        function activateSimple() {
-            clockStyle = "simple";
-            addClass(simpleClockButton, "active");
-            removeClass(niceClockButton, "active");
-        }
-
-        activateSimple();
-
-        function activateNice() {
-            clockStyle = "nice";
-            addClass(niceClockButton, "active");
-            removeClass(simpleClockButton, "active");
+        function changeFace(faceStyle) {
+            clockStyle = faceStyle;
+            drawBackground();
         }
 
         simpleClockButton.onclick = function () {
-            activateSimple();
-            drawBackground();
+            changeFace("simple");
         };
 
         niceClockButton.onclick = function () {
-            activateNice();
-            drawBackground();
+            changeFace("nice");
         };
 
         // Make the activity stop with the stop button.
