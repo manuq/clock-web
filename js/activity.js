@@ -2,9 +2,9 @@ define(function (require) {
 
     var activity = require("sugar-html-activity/activity");
     var palette = require("sugar-html-graphics/palette");
-    var icons = require("sugar-html-graphics/icons");
+    var icon = require("sugar-html-graphics/icon");
     var util = require("sugar-html-graphics/util");
-    var radioToolButton = require("sugar-html-graphics/radiotoolbutton");
+    var radioButtonsGroup = require("sugar-html-graphics/radiobuttonsgroup");
 
     // Manipulate the DOM only when it is ready.
     require(['domReady!'], function (doc) {
@@ -17,7 +17,7 @@ define(function (require) {
 
         var activityButton = document.getElementById("activity-button");
         activity.getXOColor(function (colors) {
-            icons.colorize(activityButton, colors);
+            icon.colorize(activityButton, colors);
         });
 
         var activityPalette = new palette.Palette(activityButton);
@@ -27,15 +27,15 @@ define(function (require) {
         var container = activityPalette.getContainer();
         container.appendChild(sampleText);
 
-        activityButton.onclick = function() {
+        activityButton.onclick = function () {
             activityPalette.toggle();
         };
 
         var simpleClockButton = document.getElementById("simple-clock-button");
         var niceClockButton = document.getElementById("nice-clock-button");
 
-        var simpleNiceRadio = new radioToolButton.RadioToolButton(
-            [simpleClockButton, niceClockButton]);
+        var simpleNiceRadio = new radioButtonsGroup.RadioButtonsGroup(
+        [simpleClockButton, niceClockButton]);
 
         var clockStyle = "simple";
 
@@ -155,7 +155,7 @@ define(function (require) {
                 '</span>';
 
             handAngles.hours = Math.PI - (Math.PI / 6 * hours +
-                                          Math.PI / 360 * minutes);
+                Math.PI / 360 * minutes);
 
             handAngles.minutes = Math.PI - Math.PI / 30 * minutes;
             handAngles.seconds = Math.PI - Math.PI / 30 * seconds;
@@ -204,9 +204,9 @@ define(function (require) {
                 ctx.save();
                 ctx.translate(margin, margin);
                 ctx.moveTo(radius + (radius - inset) * cos,
-                           radius + (radius - inset) * sin);
+                    radius + (radius - inset) * sin);
                 ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
-                           radius + (radius - ctx.lineWidth) * sin);
+                    radius + (radius - ctx.lineWidth) * sin);
 
                 ctx.stroke();
                 ctx.restore();
@@ -215,10 +215,10 @@ define(function (require) {
 
         function drawNiceBackground(ctx) {
             var niceImageElem = document.createElement('img');
-            var onLoad = function() {
+            var onLoad = function () {
                 backgroundContext.clearRect(margin, margin, radius * 2, radius * 2);
                 ctx.drawImage(niceImageElem, margin, margin, radius * 2,
-                              radius * 2);
+                    radius * 2);
             };
             niceImageElem.addEventListener('load', onLoad, false);
             niceImageElem.src = "images/clock.svg";
@@ -261,7 +261,7 @@ define(function (require) {
                 ctx.arc(centerX, centerY, ctx.lineWidth * 0.6, 0, 2 * Math.PI);
                 ctx.moveTo(centerX, centerY);
                 ctx.lineTo(centerX + handSizes[name] * Math.sin(handAngles[name]),
-                           centerY + handSizes[name] * Math.cos(handAngles[name]));
+                    centerY + handSizes[name] * Math.cos(handAngles[name]));
                 ctx.stroke();
             }
         }
