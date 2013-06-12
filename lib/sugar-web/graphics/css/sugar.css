@@ -1,0 +1,226 @@
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  height: 100%;
+  background-color: #c0c0c0;
+}
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.pull-right {
+  float: right;
+}
+/* Toolbar */
+.toolbar {
+  color: white;
+  background-color: #282828;
+  padding: 0 57px;
+  height: 55px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+/* Toolbar toolbutton */
+.toolbar .toolbutton {
+  background-color: transparent;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  color: white;
+  color: transparent;
+  border: 0;
+  border-radius: 5.5px;
+  margin: 4px 2px;
+  width: 47px;
+  height: 47px;
+}
+.toolbar .toolbutton:hover {
+  background-color: black;
+}
+.toolbar .toolbutton:active,
+.toolbar .toolbutton.active {
+  background-color: #808080;
+}
+.toolbar .toolbutton img {
+  width: 100%;
+  height: 100%;
+}
+.toolbar #stop-button {
+  background-image: url('../icons/actions/activity-stop.svg');
+}
+/* Canvas */
+#canvas {
+  color: black;
+  background-color: #c0c0c0;
+  margin: 11px;
+}
+/* Button */
+button {
+  background-color: #808080;
+  color: white;
+  border: 2px solid transparent;
+  border-radius: 22px;
+  line-height: 22px;
+  padding: 2px 4px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+button:hover {
+  background-color: #a2a2a2;
+  border-color: #a2a2a2;
+}
+button:active {
+  background-color: white;
+  color: black;
+  border-color: #808080;
+}
+button:focus {
+  border-color: white;
+}
+.toolbar button {
+  margin-top: 12.5px;
+}
+/* Button with icon */
+button.icon {
+  position: relative;
+  padding-left: 26px;
+}
+button.icon span.ok {
+  background-image: url(../icons/actions/dialog-ok.svg);
+}
+button.icon:active span.ok {
+  background-image: url(../icons/actions/dialog-ok-active.svg);
+}
+button.icon span.cancel {
+  background-image: url(../icons/actions/dialog-cancel.svg);
+}
+button.icon:active span.cancel {
+  background-image: url(../icons/actions/dialog-cancel-active.svg);
+}
+button.icon span {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background-color: transparent;
+  background-position: center;
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  position: absolute;
+}
+button.icon span {
+  top: 2px;
+  left: 2px;
+}
+/* One line text input */
+input[type='text'] {
+  background-color: #e5e5e5;
+  border: 2px solid #e5e5e5;
+  border-radius: 22px;
+  padding: 4px;
+  width: 165px;
+  line-height: 22px;
+  outline: 0;
+}
+input[type='text']:focus {
+  background-color: white;
+}
+input[type='text']:disabled {
+  border-color: #808080;
+  background-color: #808080;
+}
+.toolbar input[type='text'] {
+  margin-top: 10.5px;
+}
+/* One line text input with buttons inside */
+.icon-input {
+  display: inline-block;
+  position: relative;
+}
+.icon-input input[type='text'] {
+  width: 135px;
+  padding-right: 34px;
+}
+.icon-input button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  position: absolute;
+  background-size: 22px 22px;
+}
+.icon-input button.right {
+  margin: 0 0 0 -34px;
+  border-radius: 0 22px 22px 0;
+  right: 0;
+}
+.icon-input button {
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 0;
+}
+.icon-input button {
+  top: 2px;
+}
+.toolbar .icon-input button:hover {
+  background-color: transparent;
+}
+.toolbar .icon-input button {
+  top: 10.5px;
+}
+button.cancel {
+  background-image: url(../icons/actions/entry-cancel.svg);
+}
+button.cancel:active {
+  background-image: url(../icons/actions/entry-cancel-active.svg);
+}
+button.cancel:disabled {
+  background-image: url(../icons/actions/entry-cancel-disabled.svg);
+}
+/* Slider */
+/* FIXME this is not fully Sugarized yet */
+input[type='range'] {
+  -webkit-appearance: none !important;
+  background-color: #808080;
+  border-radius: 22px;
+  height: 11px;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  background-color: #c0c0c0;
+  border: 4px solid #808080;
+  border-radius: 11px;
+  height: 22px;
+  width: 22px;
+}
+input[type='range']::-webkit-slider-thumb:hover {
+  background-color: #e2e2e2;
+  border-color: #a2a2a2;
+}
+.toolbar input[type='range'] {
+  margin-top: 22px;
+}
+/* Label */
+label {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+/* Palettes */
+.palette {
+  color: white;
+  background-color: black;
+  position: absolute;
+  border: 2px solid #808080;
+}
+/* Grid for visual debugging and layout */
+.grid {
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

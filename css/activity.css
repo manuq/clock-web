@@ -1,4 +1,5 @@
 #canvas {
+  margin: 0;
   text-align: center;
 }
 
@@ -20,14 +21,14 @@ canvas {
   margin: 0;
 }
 
-#toolbar #activity-button {
+#main-toolbar #activity-button {
   background-image: url(../activity/activity-clock.svg);
 }
 
-#toolbar #simple-clock-button {
+#main-toolbar #simple-clock-button {
   background-image: url(../images/simple-clock.svg);
 }
 
-#toolbar #nice-clock-button {
+#main-toolbar #nice-clock-button {
   background-image: url(../images/nice-clock.svg);
 }

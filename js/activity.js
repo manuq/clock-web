@@ -1,23 +1,25 @@
 define(function (require) {
-
-    var activity = require("sugar-html-activity/activity");
-    var palette = require("sugar-html-graphics/palette");
-    var icon = require("sugar-html-graphics/icon");
-    var util = require("sugar-html-graphics/util");
-    var radioButtonsGroup = require("sugar-html-graphics/radiobuttonsgroup");
+    var activity = require("sugar-web/activity/activity");
+    var icon = require("sugar-web/graphics/icon");
+    var palette = require("sugar-web/graphics/palette");
+    var radioButtonsGroup = require("sugar-web/graphics/radiobuttonsgroup");
 
     // Manipulate the DOM only when it is ready.
     require(['domReady!'], function (doc) {
 
         // Initialize the activity.
-
         activity.setup();
 
         // Colorize the activity icon.
-
         var activityButton = document.getElementById("activity-button");
-        activity.getXOColor(function (colors) {
+        activity.getXOColor(function (error, colors) {
             icon.colorize(activityButton, colors);
+        });
+
+        // Make the activity stop with the stop button.
+        var stopButton = document.getElementById("stop-button");
+        stopButton.addEventListener('click', function (e) {
+            activity.close();
         });
 
         var activityPalette = new palette.Palette(activityButton);
@@ -50,13 +52,6 @@ define(function (require) {
 
         niceClockButton.onclick = function () {
             changeFace("nice");
-        };
-
-        // Make the activity stop with the stop button.
-
-        var stopButton = document.getElementById("stop-button");
-        stopButton.onclick = function () {
-            activity.close();
         };
 
         var fps = 1;
@@ -99,7 +94,7 @@ define(function (require) {
         };
 
         function updateSizes() {
-            var toolbarElem = document.getElementById("toolbar");
+            var toolbarElem = document.getElementById("main-toolbar");
 
             var height = window.innerHeight - (textTimeElem.offsetHeight +
                 toolbarElem.offsetHeight) - 1;
@@ -135,8 +130,8 @@ define(function (require) {
             };
         }
 
+        // Update text and hand angles using the current time.
         function update() {
-            // update text time
             var date = new Date();
             var hours = date.getHours();
             var minutes = date.getMinutes();
@@ -161,11 +156,11 @@ define(function (require) {
             handAngles.seconds = Math.PI - Math.PI / 30 * seconds;
         }
 
+        // Draw the background of the simple clock.
+        //
+        // The simple clock background is a white disk, with hours and
+        // minutes ticks, and the hour numbers.
         function drawSimpleBackground(ctx) {
-            // Draw the background of the simple clock.
-            //
-            // The simple clock background is a white disk, with hours and
-            // minutes ticks, and the hour numbers.
 
             backgroundContext.clearRect(0, 0, size, size);
 
@@ -224,8 +219,8 @@ define(function (require) {
             niceImageElem.src = "images/clock.svg";
         }
 
+        // Draw the numbers of the hours.
         function drawNumbers(ctx) {
-            // Draw the numbers of the hours.
 
             ctx.fillStyle = colors.hours;
             ctx.textBaseline = 'middle';
@@ -245,8 +240,8 @@ define(function (require) {
             }
         }
 
+        // Draw the hands of the analog clocks.
         function drawHands(ctx) {
-            // Draw the hands of the analog clocks.
 
             // Clear canvas first.
             ctx.clearRect(margin, margin, radius * 2, radius * 2);
