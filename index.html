@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8" />
 <title>Clock Activity</title>
-<link rel="stylesheet" href="lib/sugar-html-graphics/css/sugar.css">
+<link rel="stylesheet" href="lib/sugar-web/graphics/css/sugar.css">
 <link rel="stylesheet" href="css/activity.css">
 <script data-main="js/loader" src="lib/require.js"></script>
 </head>
+
 <body>
-  <div id="toolbar">
-    <button id="activity-button" title="Clock Activity"></button>
-    <button id="simple-clock-button" title="Simple Clock"></button>
-    <button id="nice-clock-button" title="Nice Clock"></button>
-
-    <!-- Buttons with class="pull-right" will be right aligned -->
-
-    <button id="stop-button" class="pull-right" title="Stop"></button>
+  <div id="main-toolbar" class="toolbar">
+    <button class="toolbutton" id="activity-button" title="My Activity"></button>
+    <button class="toolbutton" id="simple-clock-button" title="Simple Clock"></button>
+    <button class="toolbutton" id="nice-clock-button" title="Nice Clock"></button>
+    <button class="toolbutton pull-right" id="stop-button" title="Stop"></button>
   </div>
   <div id="canvas">
     <div id="clock-container">

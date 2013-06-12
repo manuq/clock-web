@@ -1,7 +1,6 @@
 [Activity]
-name = Clock
+name = ClockWeb
 activity_version = 1
-bundle_id = org.sugarlabs.ClockJS
-exec = sugar-activity-html
+bundle_id = org.sugarlabs.ClockWeb
+exec = sugar-activity-web
 icon = activity-clock
-license = GPLv2+
