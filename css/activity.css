@@ -16,8 +16,13 @@ canvas {
 
 #text-time {
   font-family: monospace;
-  font-size: 25pt;
+  font-size: 35px;
   font-weight: bold;
+  margin: 0;
+}
+
+#text-date {
+  font-size: 25px;
   margin: 0;
 }
 

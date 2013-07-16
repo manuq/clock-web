@@ -2,6 +2,7 @@ define(function (require) {
     var activity = require("sugar-web/activity/activity");
     var radioButtonsGroup = require("sugar-web/graphics/radiobuttonsgroup");
     var mustache = require("mustache");
+    var moment = require("moment");
 
     // Manipulate the DOM only when it is ready.
     require(['domReady!'], function (doc) {
@@ -43,6 +44,7 @@ define(function (require) {
 
             // DOM elements.
             this.textTimeElem = document.getElementById('text-time');
+            this.textDateElem = document.getElementById('text-date');
             this.clockCanvasElem = document.getElementById("clock-canvas");
             this.clockContainerElem = this.clockCanvasElem.parentNode;
 
@@ -86,8 +88,9 @@ define(function (require) {
 
         Clock.prototype.updateSizes = function () {
             var toolbarElem = document.getElementById("main-toolbar");
+            var textContainerElem = document.getElementById("text-container");
 
-            var height = window.innerHeight - (this.textTimeElem.offsetHeight +
+            var height = window.innerHeight - (textContainerElem.offsetHeight +
                 toolbarElem.offsetHeight) - 1;
 
             this.size = Math.min(window.innerWidth, height);
@@ -145,8 +148,11 @@ define(function (require) {
                                 'minutes': zeroFill(minutes),
                                 'seconds': zeroFill(seconds)
                                }
+
             this.textTimeElem.innerHTML = mustache.render(template,
                                                           templateData);
+
+            this.textDateElem.innerHTML = moment(date).format("dddd, LL");
 
             this.handAngles.hours = Math.PI - (Math.PI / 6 * hours +
                 Math.PI / 360 * minutes);
