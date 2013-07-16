@@ -1,7 +1,5 @@
 define(function (require) {
     var activity = require("sugar-web/activity/activity");
-    var icon = require("sugar-web/graphics/icon");
-    var palette = require("sugar-web/graphics/palette");
     var radioButtonsGroup = require("sugar-web/graphics/radiobuttonsgroup");
 
     // Manipulate the DOM only when it is ready.
@@ -9,29 +7,6 @@ define(function (require) {
 
         // Initialize the activity.
         activity.setup();
-
-        // Colorize the activity icon.
-        var activityButton = document.getElementById("activity-button");
-        activity.getXOColor(function (error, colors) {
-            icon.colorize(activityButton, colors);
-        });
-
-        // Make the activity stop with the stop button.
-        var stopButton = document.getElementById("stop-button");
-        stopButton.addEventListener('click', function (e) {
-            activity.close();
-        });
-
-        var activityPalette = new palette.Palette(activityButton);
-
-        var sampleText = document.createElement('p');
-        sampleText.innerText = "Clock Activity";
-        var container = activityPalette.getContainer();
-        container.appendChild(sampleText);
-
-        activityButton.onclick = function () {
-            activityPalette.toggle();
-        };
 
         var simpleClockButton = document.getElementById("simple-clock-button");
         var niceClockButton = document.getElementById("nice-clock-button");
