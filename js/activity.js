@@ -280,9 +280,11 @@ define(function (require) {
         Clock.prototype.drawNumbers = function () {
             var ctx = this.bgCanvasElem.getContext('2d');
 
+            var fontSize = 30 * this.radius / 160;
+
             ctx.fillStyle = this.colors.hours;
             ctx.textBaseline = 'middle';
-            ctx.font = "bold 40px sans-serif";
+            ctx.font = "bold " + fontSize + "px sans-serif";
 
             for (var i = 0; i < 12; i++) {
                 var cos = Math.cos((i - 2) * Math.PI / 6);
