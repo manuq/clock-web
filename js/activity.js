@@ -1,6 +1,7 @@
 define(function (require) {
     var activity = require("sugar-web/activity/activity");
     var radioButtonsGroup = require("sugar-web/graphics/radiobuttonsgroup");
+    var mustache = require("mustache");
 
     // Manipulate the DOM only when it is ready.
     require(['domReady!'], function (doc) {
@@ -131,16 +132,21 @@ define(function (require) {
                 return ('00' + number).substr(-2);
             };
 
-            this.textTimeElem.innerHTML =
-                '<span style="color:' + this.colors.hours + '">'
-                + zeroFill(hours) +
+            var template =
+                '<span style="color: {{ colors.hours }}">{{ hours }}' +
                 '</span>' +
-                ':<span style="color:' + this.colors.minutes + '">'
-                + zeroFill(minutes) +
+                ':<span style="color: {{ colors.minutes }}">{{ minutes }}' +
                 '</span>' +
-                ':<span style="color:' + this.colors.seconds + '">'
-                + zeroFill(seconds) +
+                ':<span style="color: {{ colors.seconds }}">{{ seconds }}' +
                 '</span>';
+
+            var templateData = {'colors': this.colors,
+                                'hours': zeroFill(hours),
+                                'minutes': zeroFill(minutes),
+                                'seconds': zeroFill(seconds)
+                               }
+            this.textTimeElem.innerHTML = mustache.render(template,
+                                                          templateData);
 
             this.handAngles.hours = Math.PI - (Math.PI / 6 * hours +
                 Math.PI / 360 * minutes);
