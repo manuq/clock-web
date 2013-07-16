@@ -13,6 +13,9 @@
     <button class="toolbutton" id="activity-button" title="My Activity"></button>
     <button class="toolbutton" id="simple-clock-button" title="Simple Clock"></button>
     <button class="toolbutton" id="nice-clock-button" title="Nice Clock"></button>
+    <hr/>
+    <button class="toolbutton" id="write-time-button" title="Write time"></button>
+    <button class="toolbutton" id="write-date-button" title="Write date"></button>
     <button class="toolbutton pull-right" id="stop-button" title="Stop"></button>
   </div>
   <div id="canvas">
@@ -20,7 +23,8 @@
       <canvas id="clock-canvas"></canvas>
     </div>
     <div id="text-container">
-      <p id="text-time">What Time Is It?</p>
+      <p style="display: none" id="text-time">What Time Is It?</p>
+      <p style="display: none" id="text-date">.</p>
     </div>
   </div>
 </body>

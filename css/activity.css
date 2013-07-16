@@ -16,8 +16,13 @@ canvas {
 
 #text-time {
   font-family: monospace;
-  font-size: 25pt;
+  font-size: 35px;
   font-weight: bold;
+  margin: 0;
+}
+
+#text-date {
+  font-size: 25px;
   margin: 0;
 }
 
@@ -26,9 +31,17 @@ canvas {
 }
 
 #main-toolbar #simple-clock-button {
-  background-image: url(../images/simple-clock.svg);
+  background-image: url(../icons/simple-clock.svg);
 }
 
 #main-toolbar #nice-clock-button {
-  background-image: url(../images/nice-clock.svg);
+  background-image: url(../icons/nice-clock.svg);
+}
+
+#main-toolbar #write-time-button {
+  background-image: url(../icons/write-time.svg);
+}
+
+#main-toolbar #write-date-button {
+  background-image: url(../icons/write-date.svg);
 }
