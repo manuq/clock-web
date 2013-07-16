@@ -1,8 +1,7 @@
 define(function (require) {
     var activity = require("sugar-web/activity/activity");
-    var icon = require("sugar-web/graphics/icon");
-    var palette = require("sugar-web/graphics/palette");
     var radioButtonsGroup = require("sugar-web/graphics/radiobuttonsgroup");
+    var mustache = require("mustache");
 
     // Manipulate the DOM only when it is ready.
     require(['domReady!'], function (doc) {
@@ -10,128 +9,120 @@ define(function (require) {
         // Initialize the activity.
         activity.setup();
 
-        // Colorize the activity icon.
-        var activityButton = document.getElementById("activity-button");
-        activity.getXOColor(function (error, colors) {
-            icon.colorize(activityButton, colors);
-        });
+        var requestAnimationFrame = window.requestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.msRequestAnimationFrame;
 
-        // Make the activity stop with the stop button.
-        var stopButton = document.getElementById("stop-button");
-        stopButton.addEventListener('click', function (e) {
-            activity.close();
-        });
+        function Clock() {
+            this.face = "simple";
 
-        var activityPalette = new palette.Palette(activityButton);
-
-        var sampleText = document.createElement('p');
-        sampleText.innerText = "Clock Activity";
-        var container = activityPalette.getContainer();
-        container.appendChild(sampleText);
-
-        activityButton.onclick = function () {
-            activityPalette.toggle();
-        };
-
-        var simpleClockButton = document.getElementById("simple-clock-button");
-        var niceClockButton = document.getElementById("nice-clock-button");
-
-        var simpleNiceRadio = new radioButtonsGroup.RadioButtonsGroup(
-        [simpleClockButton, niceClockButton]);
-
-        var clockStyle = "simple";
-
-        function changeFace(faceStyle) {
-            clockStyle = faceStyle;
-            drawBackground();
-        }
-
-        simpleClockButton.onclick = function () {
-            changeFace("simple");
-        };
-
-        niceClockButton.onclick = function () {
-            changeFace("nice");
-        };
-
-        var fps = 1;
-
-        var previousTime = Date.now();
-
-        var textTimeElem = document.getElementById('text-time');
-        var clockCanvasElem = document.getElementById("clock-canvas");
-
-        var clockContainerElem = clockCanvasElem.parentNode;
-
-        var bgCanvasElem = document.createElement('canvas');
-        clockContainerElem.insertBefore(bgCanvasElem, clockCanvasElem);
-
-        var clockContext = clockCanvasElem.getContext("2d");
-        var backgroundContext = bgCanvasElem.getContext('2d');
-
-        // These are calculated on each resize to fill the available space
-        var size;
-        var margin;
-        var radius;
-        var centerX;
-        var centerY;
-        var lineWidthBase;
-        var handSizes;
-        var lineWidths;
-
-        var handAngles = {
-            'hours': 0,
-            'minutes': 0,
-            'seconds': 0
-        };
-
-        var colors = {
-            'black': "#000000",
-            'white': "#FFFFFF",
-            'hours': "#005FE4",
-            'minutes': "#00B20D",
-            'seconds': "#E6000A"
-        };
-
-        function updateSizes() {
-            var toolbarElem = document.getElementById("main-toolbar");
-
-            var height = window.innerHeight - (textTimeElem.offsetHeight +
-                toolbarElem.offsetHeight) - 1;
-
-            size = Math.min(window.innerWidth, height);
-
-            clockCanvasElem.width = size;
-            clockCanvasElem.height = size;
-
-            bgCanvasElem.width = size;
-            bgCanvasElem.height = size;
-
-            clockContainerElem.style.width = size + "px";
-            clockContainerElem.style.height = size + "px";
-
-            margin = size * 0.02;
-            radius = (size - (2 * margin)) / 2;
-
-            centerX = radius + margin;
-            centerY = radius + margin;
-            lineWidthBase = radius / 150;
-
-            handSizes = {
-                'hours': radius * 0.5,
-                'minutes': radius * 0.7,
-                'seconds': radius * 0.8
+            this.handAngles = {
+                'hours': 0,
+                'minutes': 0,
+                'seconds': 0
             };
 
-            lineWidths = {
-                'hours': lineWidthBase * 9,
-                'minutes': lineWidthBase * 6,
-                'seconds': lineWidthBase * 4
+            this.colors = {
+                'black': "#000000",
+                'white': "#FFFFFF",
+                'hours': "#005FE4",
+                'minutes': "#00B20D",
+                'seconds': "#E6000A"
+            };
+
+            // These are calculated on each resize to fill the available space.
+            this.size = undefined;
+            this.margin = undefined;
+            this.radius = undefined;
+            this.centerX = undefined;
+            this.centerY = undefined;
+            this.lineWidthBase = undefined;
+            this.handSizes = undefined;
+            this.lineWidths = undefined;
+
+            // DOM elements.
+            this.textTimeElem = document.getElementById('text-time');
+            this.clockCanvasElem = document.getElementById("clock-canvas");
+            this.clockContainerElem = this.clockCanvasElem.parentNode;
+
+            this.bgCanvasElem = document.createElement('canvas');
+            this.clockContainerElem.insertBefore(this.bgCanvasElem,
+                                                 this.clockCanvasElem);
+
+            var that = this;
+            window.onresize = function (event) {
+                that.updateSizes();
+                that.drawBackground();
+            };
+        }
+
+        Clock.prototype.start = function (face) {
+            this.updateSizes();
+            this.drawBackground();
+            this.update();
+            this.drawHands();
+
+            this.previousTime = Date.now();
+            this.tick();
+        }
+
+        Clock.prototype.tick = function () {
+            var currentTime = Date.now();
+
+            // Update each second (1000 miliseconds).
+            if ((currentTime - this.previousTime) > 1000) {
+                this.previousTime = currentTime;
+                this.update();
+                this.drawHands();
+            }
+            requestAnimationFrame(this.tick.bind(this));
+        }
+
+        Clock.prototype.changeFace = function (face) {
+            this.face = face;
+            this.drawBackground();
+        }
+
+        Clock.prototype.updateSizes = function () {
+            var toolbarElem = document.getElementById("main-toolbar");
+
+            var height = window.innerHeight - (this.textTimeElem.offsetHeight +
+                toolbarElem.offsetHeight) - 1;
+
+            this.size = Math.min(window.innerWidth, height);
+
+            this.clockCanvasElem.width = this.size;
+            this.clockCanvasElem.height = this.size;
+
+            this.bgCanvasElem.width = this.size;
+            this.bgCanvasElem.height = this.size;
+
+            this.clockContainerElem.style.width = this.size + "px";
+            this.clockContainerElem.style.height = this.size + "px";
+
+            this.margin = this.size * 0.02;
+            this.radius = (this.size - (2 * this.margin)) / 2;
+
+            this.centerX = this.radius + this.margin;
+            this.centerY = this.radius + this.margin;
+            this.lineWidthBase = this.radius / 150;
+
+            this.handSizes = {
+                'hours': this.radius * 0.5,
+                'minutes': this.radius * 0.7,
+                'seconds': this.radius * 0.8
+            };
+
+            this.lineWidths = {
+                'hours': this.lineWidthBase * 9,
+                'minutes': this.lineWidthBase * 6,
+                'seconds': this.lineWidthBase * 4
             };
         }
 
         // Update text and hand angles using the current time.
-        function update() {
+        Clock.prototype.update = function () {
             var date = new Date();
             var hours = date.getHours();
             var minutes = date.getMinutes();
@@ -141,37 +132,58 @@ define(function (require) {
                 return ('00' + number).substr(-2);
             };
 
-            textTimeElem.innerHTML =
-                '<span style="color:' + colors.hours + '">' + zeroFill(hours) +
+            var template =
+                '<span style="color: {{ colors.hours }}">{{ hours }}' +
                 '</span>' +
-                ':<span style="color:' + colors.minutes + '">' + zeroFill(minutes) +
+                ':<span style="color: {{ colors.minutes }}">{{ minutes }}' +
                 '</span>' +
-                ':<span style="color:' + colors.seconds + '">' + zeroFill(seconds) +
+                ':<span style="color: {{ colors.seconds }}">{{ seconds }}' +
                 '</span>';
 
-            handAngles.hours = Math.PI - (Math.PI / 6 * hours +
+            var templateData = {'colors': this.colors,
+                                'hours': zeroFill(hours),
+                                'minutes': zeroFill(minutes),
+                                'seconds': zeroFill(seconds)
+                               }
+            this.textTimeElem.innerHTML = mustache.render(template,
+                                                          templateData);
+
+            this.handAngles.hours = Math.PI - (Math.PI / 6 * hours +
                 Math.PI / 360 * minutes);
 
-            handAngles.minutes = Math.PI - Math.PI / 30 * minutes;
-            handAngles.seconds = Math.PI - Math.PI / 30 * seconds;
+            this.handAngles.minutes = Math.PI - Math.PI / 30 * minutes;
+            this.handAngles.seconds = Math.PI - Math.PI / 30 * seconds;
+        }
+
+        Clock.prototype.drawBackground = function () {
+            if (this.face == "simple") {
+                this.drawSimpleBackground();
+                this.drawNumbers();
+            }
+            else {
+                this.drawNiceBackground();
+            }
+            this.drawHands();
         }
 
         // Draw the background of the simple clock.
         //
         // The simple clock background is a white disk, with hours and
         // minutes ticks, and the hour numbers.
-        function drawSimpleBackground(ctx) {
+        Clock.prototype.drawSimpleBackground = function () {
+            var ctx = this.bgCanvasElem.getContext('2d');
 
-            backgroundContext.clearRect(0, 0, size, size);
+            ctx.clearRect(0, 0, this.size, this.size);
 
             // Simple clock background
-            var lineWidthBackground = lineWidthBase * 4;
+            var lineWidthBackground = this.lineWidthBase * 4;
             ctx.lineCap = 'round';
             ctx.lineWidth = lineWidthBackground;
-            ctx.strokeStyle = colors.black;
-            ctx.fillStyle = colors.white;
+            ctx.strokeStyle = this.colors.black;
+            ctx.fillStyle = this.colors.white;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, radius - lineWidthBackground, 0, 2 * Math.PI);
+            ctx.arc(this.centerX, this.centerY,
+                    this.radius - lineWidthBackground, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
 
@@ -179,16 +191,16 @@ define(function (require) {
             for (var i = 0; i < 60; i++) {
                 var inset;
                 if (i % 15 === 0) {
-                    inset = 0.15 * radius;
-                    ctx.lineWidth = lineWidthBase * 7;
+                    inset = 0.15 * this.radius;
+                    ctx.lineWidth = this.lineWidthBase * 7;
                 }
                 else if (i % 5 === 0) {
-                    inset = 0.12 * radius;
-                    ctx.lineWidth = lineWidthBase * 5;
+                    inset = 0.12 * this.radius;
+                    ctx.lineWidth = this.lineWidthBase * 5;
                 }
                 else {
-                    inset = 0.08 * radius;
-                    ctx.lineWidth = lineWidthBase * 4;
+                    inset = 0.08 * this.radius;
+                    ctx.lineWidth = this.lineWidthBase * 4;
                 }
 
                 ctx.lineCap = 'round';
@@ -197,32 +209,39 @@ define(function (require) {
                 var cos = Math.cos(i * Math.PI / 30);
                 var sin = Math.sin(i * Math.PI / 30);
                 ctx.save();
-                ctx.translate(margin, margin);
-                ctx.moveTo(radius + (radius - inset) * cos,
-                    radius + (radius - inset) * sin);
-                ctx.lineTo(radius + (radius - ctx.lineWidth) * cos,
-                    radius + (radius - ctx.lineWidth) * sin);
+                ctx.translate(this.margin, this.margin);
+                ctx.moveTo(
+                    this.radius + (this.radius - inset) * cos,
+                    this.radius + (this.radius - inset) * sin);
+                ctx.lineTo(
+                    this.radius + (this.radius - ctx.lineWidth) * cos,
+                    this.radius + (this.radius - ctx.lineWidth) * sin);
 
                 ctx.stroke();
                 ctx.restore();
             }
         }
 
-        function drawNiceBackground(ctx) {
+        Clock.prototype.drawNiceBackground = function () {
+            var ctx = this.bgCanvasElem.getContext('2d');
+
             var niceImageElem = document.createElement('img');
+            var that = this;
             var onLoad = function () {
-                backgroundContext.clearRect(margin, margin, radius * 2, radius * 2);
-                ctx.drawImage(niceImageElem, margin, margin, radius * 2,
-                    radius * 2);
+                ctx.clearRect(that.margin, that.margin,
+                              that.radius * 2, that.radius * 2);
+                ctx.drawImage(niceImageElem, that.margin, that.margin,
+                              that.radius * 2, that.radius * 2);
             };
             niceImageElem.addEventListener('load', onLoad, false);
             niceImageElem.src = "images/clock.svg";
         }
 
         // Draw the numbers of the hours.
-        function drawNumbers(ctx) {
+        Clock.prototype.drawNumbers = function () {
+            var ctx = this.bgCanvasElem.getContext('2d');
 
-            ctx.fillStyle = colors.hours;
+            ctx.fillStyle = this.colors.hours;
             ctx.textBaseline = 'middle';
             ctx.font = "bold 40px sans-serif";
 
@@ -233,70 +252,60 @@ define(function (require) {
                 var textWidth = ctx.measureText(text).width;
 
                 ctx.save();
-                ctx.translate(centerX - textWidth / 2, centerY);
-                ctx.translate(radius * 0.75 * cos, radius * 0.75 * sin);
+                ctx.translate(this.centerX - textWidth / 2, this.centerY);
+                ctx.translate(this.radius * 0.75 * cos,
+                              this.radius * 0.75 * sin);
                 ctx.fillText(text, 0, 0);
                 ctx.restore();
             }
         }
 
         // Draw the hands of the analog clocks.
-        function drawHands(ctx) {
+        Clock.prototype.drawHands = function () {
+            var ctx = this.clockCanvasElem.getContext("2d");
 
             // Clear canvas first.
-            ctx.clearRect(margin, margin, radius * 2, radius * 2);
+            ctx.clearRect(this.margin, this.margin, this.radius * 2,
+                          this.radius * 2);
 
             var handNames = ['hours', 'minutes', 'seconds'];
             for (var i = 0; i < handNames.length; i++) {
                 var name = handNames[i];
                 ctx.lineCap = 'round';
-                ctx.lineWidth = lineWidths[name];
-                ctx.strokeStyle = colors[name];
+                ctx.lineWidth = this.lineWidths[name];
+                ctx.strokeStyle = this.colors[name];
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, ctx.lineWidth * 0.6, 0, 2 * Math.PI);
-                ctx.moveTo(centerX, centerY);
-                ctx.lineTo(centerX + handSizes[name] * Math.sin(handAngles[name]),
-                    centerY + handSizes[name] * Math.cos(handAngles[name]));
+                ctx.arc(this.centerX, this.centerY, ctx.lineWidth * 0.6, 0,
+                        2 * Math.PI);
+                ctx.moveTo(this.centerX, this.centerY);
+                ctx.lineTo(
+                    this.centerX + this.handSizes[name] *
+                        Math.sin(this.handAngles[name]),
+                    this.centerY + this.handSizes[name] *
+                        Math.cos(this.handAngles[name]));
                 ctx.stroke();
             }
         }
 
-        var requestAnimationFrame = window.requestAnimationFrame ||
-            window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-            window.msRequestAnimationFrame;
+        // Create the clock.
 
-        function animate() {
-            var currentTime = Date.now();
+        var clock = new Clock();
+        clock.start();
 
-            if ((currentTime - previousTime) > (1000 / fps)) {
-                previousTime = currentTime;
-                update();
-                drawHands(clockContext);
-            }
-            requestAnimationFrame(animate);
-        }
+        // UI controls.
 
-        function drawBackground() {
-            if (clockStyle == "simple") {
-                drawSimpleBackground(backgroundContext);
-                drawNumbers(backgroundContext);
-            }
-            else {
-                drawNiceBackground(backgroundContext);
-            }
-            drawHands(clockContext);
-        }
-
-        updateSizes();
-        drawBackground();
-
-        window.onresize = function (event) {
-            updateSizes();
-            drawBackground();
+        var simpleClockButton = document.getElementById("simple-clock-button");
+        simpleClockButton.onclick = function () {
+            clock.changeFace("simple");
         };
 
-        animate();
+        var niceClockButton = document.getElementById("nice-clock-button");
+        niceClockButton.onclick = function () {
+            clock.changeFace("nice");
+        };
+
+        var simpleNiceRadio = new radioButtonsGroup.RadioButtonsGroup(
+        [simpleClockButton, niceClockButton]);
 
     });
-
 });
