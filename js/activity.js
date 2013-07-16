@@ -32,6 +32,9 @@ define(function (require) {
                 'seconds': "#E6000A"
             };
 
+            this.writeTime = false;
+            this.writeDate = false;
+
             // These are calculated on each resize to fill the available space.
             this.size = undefined;
             this.margin = undefined;
@@ -83,6 +86,32 @@ define(function (require) {
 
         Clock.prototype.changeFace = function (face) {
             this.face = face;
+            this.drawBackground();
+        }
+
+        Clock.prototype.changeWriteTime = function (writeTime) {
+            this.writeTime = writeTime;
+            if (writeTime) {
+                this.textTimeElem.style.display = "block";
+            }
+            else {
+                this.textTimeElem.style.display = "none";
+            }
+            this.updateSizes();
+            this.update();
+            this.drawBackground();
+        }
+
+        Clock.prototype.changeWriteDate = function (writeDate) {
+            this.writeDate = writeDate;
+            if (writeDate) {
+                this.textDateElem.style.display = "block";
+            }
+            else {
+                this.textDateElem.style.display = "none";
+            }
+            this.updateSizes();
+            this.update();
             this.drawBackground();
         }
 
@@ -143,16 +172,20 @@ define(function (require) {
                 ':<span style="color: {{ colors.seconds }}">{{ seconds }}' +
                 '</span>';
 
-            var templateData = {'colors': this.colors,
-                                'hours': zeroFill(hours),
-                                'minutes': zeroFill(minutes),
-                                'seconds': zeroFill(seconds)
-                               }
+            if (this.writeTime) {
+                var templateData = {'colors': this.colors,
+                                    'hours': zeroFill(hours),
+                                    'minutes': zeroFill(minutes),
+                                    'seconds': zeroFill(seconds)
+                                   }
 
-            this.textTimeElem.innerHTML = mustache.render(template,
-                                                          templateData);
+                this.textTimeElem.innerHTML = mustache.render(template,
+                                                              templateData);
+            }
 
-            this.textDateElem.innerHTML = moment(date).format("dddd, LL");
+            if (this.writeDate) {
+                this.textDateElem.innerHTML = moment(date).format("dddd, LL");
+            }
 
             this.handAngles.hours = Math.PI - (Math.PI / 6 * hours +
                 Math.PI / 360 * minutes);
@@ -312,6 +345,20 @@ define(function (require) {
 
         var simpleNiceRadio = new radioButtonsGroup.RadioButtonsGroup(
         [simpleClockButton, niceClockButton]);
+
+        var writeTimeButton = document.getElementById("write-time-button");
+        writeTimeButton.onclick = function () {
+            this.classList.toggle('active');
+            var active = this.classList.contains('active');
+            clock.changeWriteTime(active);
+        };
+
+        var writeDateButton = document.getElementById("write-date-button");
+        writeDateButton.onclick = function () {
+            this.classList.toggle('active');
+            var active = this.classList.contains('active');
+            clock.changeWriteDate(active);
+        };
 
     });
 });
