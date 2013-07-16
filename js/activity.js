@@ -240,7 +240,7 @@ define(function (require) {
                               that.radius * 2, that.radius * 2);
             };
             niceImageElem.addEventListener('load', onLoad, false);
-            niceImageElem.src = "images/clock.svg";
+            niceImageElem.src = "clock.svg";
         }
 
         // Draw the numbers of the hours.
